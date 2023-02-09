@@ -4,7 +4,27 @@ version: 2.1
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
+commands:
+  sayhello:
+    description: "Simple command for demo purposes"
+    parameters:
+      to:
+        type: string
+        default: "hello world"
+    steps:
+      - run: echo << parameters.to >>
+
 jobs:
+  myjob:
+    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
+    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+    docker:
+      - image: circleci/node:13.8.0
+    # Add steps to the job
+    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+    steps:
+      - sayhello:
+          to: "Lev"
 
   save_hello_world_output:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
@@ -17,7 +37,7 @@ jobs:
       - checkout
       - run:
           name: "print hello"
-          command: echo "hello world" > ~/output.txt
+          command: echo << parameters.to >> > ~/output.txt
       - persist_to_workspace:
           root: ~/
           paths:
@@ -44,3 +64,4 @@ workflows:
       - print_output_file:
           requires:
             - save_hello_world_output
+      - myjob
