@@ -5,14 +5,9 @@ version: 2.1
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 commands:
-  sayhello:
-    description: "Simple command for demo purposes"
-    parameters:
-      to:
-        type: string
-        default: "hello world"
+  print_pipeline_id:
     steps:
-      - run: echo << parameters.to >>
+      - run: echo ${CIRCLE_WORKFLOW_ID}
 
 jobs:
   myjob:
@@ -23,8 +18,7 @@ jobs:
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
-      - sayhello:
-          to: "Lev"
+      - print_pipeline_id
 
   save_hello_world_output:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
@@ -37,7 +31,7 @@ jobs:
       - checkout
       - run:
           name: "print hello"
-          command: echo << parameters.to >> > ~/output.txt
+          command: echo "hello world" > ~/output.txt
       - persist_to_workspace:
           root: ~/
           paths:
