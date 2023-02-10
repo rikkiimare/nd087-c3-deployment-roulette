@@ -27,7 +27,7 @@ jobs:
       - run: exit 1
       - run:
           name: OMG we've had a failure
-          command: echo "hello imperfect world"
+          command: echo "hello imperfect world ${CIRCLE_WORKFLOW_ID:0:7}"
           when: on_fail
 
       # - run:
