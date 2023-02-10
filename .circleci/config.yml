@@ -20,38 +20,68 @@ jobs:
       - print_pipeline_id:
             id: << pipeline.id >>
 
-  save_hello_world_output:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+  trigger:
     docker:
       - image: circleci/node:13.8.0
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
-      - checkout
+      - run: return 1
+
       - run:
-          name: "print hello"
-          command: echo "hello world" > ~/output.txt
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - output.txt
+          name: OMG we've had a failure
+          command: echo "hello imperfect world"
+
+      # - run:
+        #   name: Testing application
+        #   command: make test
+        #   shell: /bin/bash
+        #   working_directory: ~/my-app
+        #   no_output_timeout: 30m
+        #   environment:
+        #     FOO: bar
+
+      # - run: echo 127.0.0.1 devhost | sudo tee -a /etc/hosts
+
+      # - run: |
+      #     sudo -u root createuser -h localhost --superuser ubuntu &&
+      #     sudo createdb -h localhost test_db
+
+      # - run:
+      #     name: Upload Failed Tests
+      #     command: curl --data fail_tests.log http://example.com/error_logs
+      #     when: on_fail  
+
+  # save_hello_world_output:
+  #   # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
+  #   # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+  #   docker:
+  #     - image: circleci/node:13.8.0
+  #   # Add steps to the job
+  #   # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: "print hello"
+  #         command: echo "hello world" > ~/output.txt
+  #     - persist_to_workspace:
+  #         root: ~/
+  #         paths:
+  #           - output.txt
   
-  print_output_file:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
-    docker:
-      - image: circleci/node:13.8.0
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
-    steps:
-      - attach_workspace:
-          at: ~/
-      - run: cat ~/output.txt
+  # print_output_file:
+  #   # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
+  #   # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+  #   docker:
+  #     - image: circleci/node:13.8.0
+  #   # Add steps to the job
+  #   # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+  #   steps:
+  #     - attach_workspace:
+  #         at: ~/
+  #     - run: cat ~/output.txt
           
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   say-hello-workflow:
     jobs:
-      - myjob
+      - trigger
